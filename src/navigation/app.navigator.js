@@ -2,7 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { View } from "react-native";
 import Login from "../screens/auth/login";
 import Register from "../screens/auth/register";
-import Details from "../screens/home/movieDetails";
+import DetailScreen from "../screens/home/movieDetails";
 import OnBoardScreen from "../screens/onboard";
 import TabNavigate from "./main.navigator";
 import SerieDetail from "../screens/home/series/serieDetails";
@@ -29,8 +29,8 @@ const AppNavigator = () => {
         <stack.Screen name="Register" component={Register} />
         <stack.Screen
           name="Details"
-          component={Details}
-          options={{ headerShown: false }}
+          component={DetailScreen}
+          // options={{ headerShown: false }}
         />
         <stack.Screen
           name="SerieDetails"

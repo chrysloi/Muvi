@@ -34,9 +34,9 @@ const Films = ({ navigation }) => {
             />
           );
         })}
-        {!now_playing && (
+        {/* {!now_playing && (
           <Text style={{ color: "#fff" }}>Nothing to display</Text>
-        )}
+        )} */}
       </ScrollView>
     </SafeAreaView>
   );

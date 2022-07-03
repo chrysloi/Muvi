@@ -14,7 +14,7 @@ function HomeNavigator() {
         headerShadowVisible: false,
         tabBarStyle: { backgroundColor: "#202123" },
         tabBarActiveTintColor: "#fff",
-        swipeEnabled: false,
+        // swipeEnabled: false,
         tabBarScrollEnabled: true,
       }}
     >

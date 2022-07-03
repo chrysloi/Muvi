@@ -72,7 +72,7 @@ const Featured = ({ navigation }) => {
                   navigation={() => {
                     navigation.navigate("Details", now);
                   }}
-                ></MovieCardLarge>
+                />
               );
             })}
           </ScrollView>
@@ -110,9 +110,9 @@ const Featured = ({ navigation }) => {
                 />
               );
             })}
-            {!top_rated && (
+            {/* {!top_rated && (
               <Text style={{ color: "#fff" }}>Nothing to display</Text>
-            )}
+            )} */}
           </ScrollView>
         </View>
 

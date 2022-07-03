@@ -5,14 +5,40 @@ import {
   View,
   TouchableOpacity,
   Image,
+  Alert,
 } from "react-native";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import * as icons from "@expo/vector-icons";
 import { vw, vh } from "../../components/units";
+import { useDispatch, useSelector } from "react-redux";
+import { GetVideoId } from "../../redux/actions/videos.action";
+import YoutubePlayer from "react-native-youtube-iframe";
+import Button from "../../components/button";
 
 export default function DetailScreen({ route, navigation }) {
   const { original_title, backdrop_path, poster_path, overview, release_date } =
     route.params;
+  const dispatch = useDispatch();
+  const { video_id } = useSelector((state) => state.Trailer);
+  const [playing, setPlaying] = useState(false);
+  const onStateChange = useCallback((state) => {
+    if (state === "ended") {
+      setPlaying(false);
+      Alert.alert("video has finished playing");
+    }
+  }, []);
+
+  const tooglePlaying = useCallback(() => {
+    setPlaying((prev) => !prev);
+  }, []);
+  useEffect(() => {
+    dispatch(GetVideoId(route.params.id));
+  }, []);
+  const youtubeKey = video_id?.filter(
+    (video) => video.name === "Official Trailer"
+  );
+  // .map((video) => video.key && video.name)
+  console.log(youtubeKey);
 
   return (
     <ScrollView>
@@ -29,12 +55,12 @@ export default function DetailScreen({ route, navigation }) {
           style={{ width: 100 * vw, height: 40 * vh }}
           blurRadius={2}
         />
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => navigation.navigate("Home")}
           style={{ position: "absolute", top: 3 * vh, left: 5 * vw }}
         >
           <icons.Ionicons name="arrow-back-outline" size={26} color="#fed130" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <Image
           source={{ uri: `https://image.tmdb.org/t/p/w500/${poster_path}` }}
           style={{
@@ -60,6 +86,20 @@ export default function DetailScreen({ route, navigation }) {
         {/* <Text style={{ color: "grey", paddingTop: 5 }}>
           Adventure, Romantic, Thriller
         </Text> */}
+        {youtubeKey?.map((video, i) => {
+          return (
+            <YoutubePlayer
+              key={video.id}
+              height={200}
+              width={"100%"}
+              play={playing}
+              videoId={video.key}
+              onChangeState={onStateChange}
+            />
+          );
+          // <Button title={playing ? "pause" : "play"} onPress={tooglePlaying} />;
+        })}
+
         <TouchableOpacity
           style={{
             flexDirection: "row",
@@ -72,9 +112,12 @@ export default function DetailScreen({ route, navigation }) {
             justifyContent: "center",
             alignItems: "center",
           }}
+          onPress={tooglePlaying}
         >
           <icons.Feather name="play" size={16} color="black" />
-          <Text style={{ paddingHorizontal: 5 }}>Play</Text>
+          <Text style={{ paddingHorizontal: 5 }}>
+            {playing ? "Pause" : "Play"}
+          </Text>
         </TouchableOpacity>
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
