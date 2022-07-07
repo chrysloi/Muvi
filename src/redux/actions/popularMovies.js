@@ -1,26 +1,25 @@
 import axios from "axios";
+import { GET_POPULAR_MOVIES, GET_POPULAR_MOVIES_FAILED } from "../";
 
 const key = "56f1cb38d475f4ac3ef8ad55e0c001f6";
-export const PopularSeries = () => {
-  return (dispatch) => {
-    dispatch({ type: "LOADING SERIES" });
 
-    axios({
+export const PopularMovies = () => {
+  return async (dispatch) => {
+    await axios({
       method: "get",
-      url: `https://api.themoviedb.org/3/tv/popular?api_key=${key}`,
+      url: `https://api.themoviedb.org/3/movie/popular?api_key=${key}`,
     })
       .then((responseData) => {
         const { data } = responseData;
-        console.log(responseData);
         dispatch({
-          type: "SERIES SUCCESSFULLY LOADED",
+          type: GET_POPULAR_MOVIES,
           payload: data.results,
         });
       })
       .catch((err) => {
         console.log(err);
         dispatch({
-          type: "SERIES FAILED TO LOAD",
+          type: GET_POPULAR_MOVIES_FAILED,
           payload: err.message,
         });
       });

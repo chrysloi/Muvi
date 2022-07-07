@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import {
   View,
@@ -11,9 +12,10 @@ import AppIntroSlider from "react-native-app-intro-slider";
 import Button from "../../components/button";
 import { vh, vw } from "../../components/units";
 
-const OnBoardScreen = ({ navigation }) => {
+const OnBoardScreen = () => {
+  navigation = useNavigation();
   const onDone = () => {
-    navigation.navigate("Login");
+    navigation.replace("Login");
   };
 
   const renderItem = ({ item }) => {

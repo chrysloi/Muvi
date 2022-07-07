@@ -1,28 +1,25 @@
+import { GET_TOP_RATED_MOVIES, GET_TOP_RATED_MOVIES_FAILED } from "..";
+
 const initialState = {
   is_loading: false,
-  pop_series: [],
+  top_rated: [],
   error: null,
 };
 
 export default (state = initialState, { type, payload }) => {
   switch (type) {
-    case "LOADING SERIES":
-      return {
-        ...state,
-        is_loading: true,
-      };
-
-    case "SERIES SUCCESSFULLY LOADED":
+    case GET_TOP_RATED_MOVIES:
       return {
         ...state,
         is_loading: false,
-        pop_series: payload,
+        top_rated: payload,
         error: null,
       };
 
-    case "SERIES FAILED TO LOAD":
+    case GET_TOP_RATED_MOVIES_FAILED:
       return {
         ...state,
+        is_loading,
         error: payload,
       };
 

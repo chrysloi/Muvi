@@ -1,24 +1,25 @@
+import { GET_LATEST_MOVIES, GET_LATEST_MOVIES_FAILED } from "..";
+
 const initialState = {
   is_loading: false,
-  video_id: [],
+  latest_movies: [],
   error: null,
 };
 
 export default (state = initialState, { type, payload }) => {
   switch (type) {
-    case "LOADING_VIDEO":
+    case GET_LATEST_MOVIES:
       return {
         ...state,
-        is_loading: true,
+        is_loading: false,
+        latest_movies: payload,
+        error: null,
       };
-    case "VIDEO_SUCCESSFULLY_LOADED":
+
+    case GET_LATEST_MOVIES_FAILED:
       return {
         ...state,
-        video_id: payload,
-      };
-    case "VIDEO_FAILED_TO_LOAD":
-      return {
-        ...state,
+        is_loading,
         error: payload,
       };
 

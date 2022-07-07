@@ -1,59 +1,29 @@
-import {
-  ImageBackground,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Modal,
-  Image,
-} from "react-native";
+import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
-import { GetSingleMovie } from "../redux/actions/movies.actions";
-import { connect } from "react-redux";
-import { vh, vw } from "./units";
+import { vh, vw } from "../units";
 
-const MovieCardLarge = (props, navigation) => {
-  const { image, title, date, key, overview } = props;
+export default (props) => {
+  const { image, title, date, navigation } = props;
   // const [id, setId]= useState(null)
-
-  // const onPress = () => {
-  //   // props.GetSingleMovie(props.id);
-  //   // alert(overview);
-  //   // console.log(props.id);
-  // };
 
   return (
     <View>
-      <TouchableOpacity
-        style={styles.containerStyles}
-        onPress={props.navigation}
-      >
+      <TouchableOpacity style={styles.containerStyles} onPress={navigation}>
         <Image
           source={{ uri: `https://image.tmdb.org/t/p/w500${image}` }}
           style={styles.imageStyles}
         />
         <View style={styles.text}>
-          <Text
-            numberOfLines={1}
-            style={[styles.titleStyles, { marginHorizontal: 5 }]}
-          >
+          <Text numberOfLines={1} style={styles.titleStyles}>
             {title}
           </Text>
-          <Text style={[styles.dateStyles, { marginHorizontal: 5 }]}>
-            {date}
-          </Text>
+          <Text style={styles.dateStyles}>{date}</Text>
         </View>
       </TouchableOpacity>
       {/* {props.detail ? console.log(props.detail) : ""} */}
     </View>
   );
 };
-const mapState = ({ Movies }) => ({
-  detail: Movies.movieDetails,
-});
-export default connect(mapState, { GetSingleMovie: GetSingleMovie })(
-  MovieCardLarge
-);
 
 const styles = StyleSheet.create({
   containerStyles: {
@@ -80,10 +50,12 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     lineHeight: 3.5 * vh,
     color: "#fff",
+    marginHorizontal: 5,
   },
   dateStyles: {
     opacity: 0.5,
     color: "#fff",
     marginVertical: 0.5 * vh,
+    marginHorizontal: 5,
   },
 });

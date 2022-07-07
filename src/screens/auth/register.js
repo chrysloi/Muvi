@@ -8,43 +8,59 @@ import {
   TouchableOpacity,
   View,
   StatusBar,
+  KeyboardAvoidingView,
+  ToastAndroid,
 } from "react-native";
 import Button from "../../components/button";
 import * as icons from "@expo/vector-icons";
 import { useState, useEffect } from "react";
 import { authCreateUser } from "../../redux/actions";
 import { useSelector, useDispatch } from "react-redux";
+import { auth } from "../../utils/auth.firebase";
+import { useNavigation } from "@react-navigation/native";
 const Register = () => {
+  const navigation = useNavigation();
   const [password, setPassword] = useState("");
   const [confimPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const [birthdate, setBirthDate] = useState("");
   const [phone, setPhone] = useState("");
   const [gender, setGender] = useState("");
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+
+  const toLogin = () => {
+    navigation.replace("Login");
+  };
   const handleSignUp = () => {
-    const validation = () => {
-      if (
-        email === "" &&
-        password === "" &&
-        phone === "" &&
-        gender === "" &&
-        confimPassword === "" &&
-        birthdate === ""
-      )
-        return alert("please fill fields");
-      if (password !== confimPassword) return alert("password don't match");
-    };
-    if (!validation) {
-      const data = {
-        email,
-        password,
-        number: phone,
-        birthdate,
-        gender,
-      };
-      dispatch(authCreateUser(data));
-    }
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        // navigation.replace("Login");
+        ToastAndroid.show("User Created", ToastAndroid.SHORT);
+      })
+      .catch((error) => alert(error.message));
+    // const validation = () => {
+    //   if (
+    //     email === "" &&
+    //     password === "" &&
+    //     confimPassword === ""
+    //     // phone === "" &&
+    //     // gender === "" &&
+    //     // birthdate === ""
+    //   )
+    //     return alert("Please fill all fields");
+    //   if (password !== confimPassword) return alert("password don't match");
+    // };
+    // if (!validation) {
+    //   // const data = {
+    //   //   email,
+    //   //   password,
+    //   //   number: phone,
+    //   //   birthdate,
+    //   //   gender,
+    //   // };
+    //   // dispatch(authCreateUser(data));
+    // }
   };
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -54,29 +70,30 @@ const Register = () => {
       ></StatusBar>
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={[styles.holder, { paddingTop: 15 }]}>
-            <Text style={{ marginBottom: 10, color: "#fff", fontSize: 15 }}>
-              Email Address
-            </Text>
-            <View style={styles.input}>
-              <icons.FontAwesome
-                name="envelope-o"
-                size={25}
-                color="#fff"
-                style={{ marginEnd: 10 }}
-              />
-              <TextInput
-                placeholder="e.g mail@example.com"
-                placeholderTextColor={"#c9c9c9"}
-                style={{ fontSize: 17, color: "#fff" }}
-                keyboardType={"email-address"}
-                value={email}
-                onChangeText={setEmail}
-              />
+          <KeyboardAvoidingView behavior="padding">
+            <View style={[styles.holder, { paddingTop: 15 }]}>
+              <Text style={{ marginBottom: 10, color: "#fff", fontSize: 15 }}>
+                Email Address
+              </Text>
+              <View style={styles.input}>
+                <icons.FontAwesome
+                  name="envelope-o"
+                  size={25}
+                  color="#fff"
+                  style={{ marginEnd: 10 }}
+                />
+                <TextInput
+                  placeholder="e.g mail@example.com"
+                  placeholderTextColor={"#c9c9c9"}
+                  style={{ fontSize: 17, color: "#fff" }}
+                  keyboardType={"email-address"}
+                  value={email}
+                  onChangeText={setEmail}
+                />
+              </View>
             </View>
-          </View>
 
-          <View style={styles.holder}>
+            {/* <View style={styles.holder}>
             <Text style={{ marginBottom: 10, color: "#fff", fontSize: 15 }}>
               Phone number
             </Text>
@@ -139,81 +156,89 @@ const Register = () => {
                 onChangeText={setGender}
               />
             </View>
-          </View>
+          </View> */}
 
-          <View style={styles.holder}>
-            <Text style={{ marginBottom: 10, color: "#fff", fontSize: 15 }}>
-              Password
-            </Text>
-            <View style={styles.input}>
-              <icons.MaterialIcons
-                name="lock-outline"
-                size={25}
-                color="#fff"
-                style={{ marginEnd: 10 }}
-              />
-              <TextInput
-                placeholder="your email"
-                placeholderTextColor={"#c9c9c9"}
-                style={{ fontSize: 17, color: "#fff" }}
-                value={password}
-                secureTextEntry={true}
-                onChangeText={setPassword}
-              />
+            <View style={styles.holder}>
+              <Text style={{ marginBottom: 10, color: "#fff", fontSize: 15 }}>
+                Password
+              </Text>
+              <View style={styles.input}>
+                <icons.MaterialIcons
+                  name="lock-outline"
+                  size={25}
+                  color="#fff"
+                  style={{ marginEnd: 10 }}
+                />
+                <TextInput
+                  placeholder="your Password"
+                  placeholderTextColor={"#c9c9c9"}
+                  style={{ fontSize: 17, color: "#fff" }}
+                  value={password}
+                  secureTextEntry
+                  onChangeText={setPassword}
+                />
+              </View>
             </View>
-          </View>
 
-          <View style={styles.holder}>
-            <Text style={{ marginBottom: 10, color: "#fff", fontSize: 15 }}>
-              Confirm Password
-            </Text>
-            <View style={styles.input}>
-              <icons.MaterialIcons
-                name="lock-outline"
-                size={25}
-                color="#fff"
-                style={{ marginEnd: 10 }}
-              />
-              <TextInput
-                placeholder="your password"
-                placeholderTextColor={"#c9c9c9"}
-                style={{ fontSize: 17, color: "#fff" }}
-                value={confimPassword}
-                secureTextEntry={true}
-                onChangeText={setConfirmPassword}
-              />
-            </View>
-          </View>
+            {/* <View style={styles.holder}>
+              <Text style={{ marginBottom: 10, color: "#fff", fontSize: 15 }}>
+                Confirm Password
+              </Text>
+              <View style={styles.input}>
+                <icons.MaterialIcons
+                  name="lock-outline"
+                  size={25}
+                  color="#fff"
+                  style={{ marginEnd: 10 }}
+                />
+                <TextInput
+                  placeholder="your password"
+                  placeholderTextColor={"#c9c9c9"}
+                  style={{ fontSize: 17, color: "#fff" }}
+                  value={confimPassword}
+                  secureTextEntry={true}
+                  onChangeText={setConfirmPassword}
+                />
+              </View>
+            </View> */}
 
-          <Button title={"Sign Up"} onPress={handleSignUp} />
-          <View style={styles.policy}>
-            <Text style={{ color: "#fff" }}>By signing up I accept </Text>
-            <Text style={{ color: "#fff" }}>terms of use{" and "}</Text>
-            <Text style={{ color: "#fff" }}>privacy policy</Text>
-          </View>
-          <Text style={styles.or}>or Sign Up with</Text>
-          <TouchableOpacity>
-            <View style={styles.option}>
-              <icons.MaterialCommunityIcons
-                name="gmail"
-                size={28}
-                color="#fff"
-                style={{ marginHorizontal: 10 }}
-              />
-              <Text style={{ color: "#fff", fontSize: 18 }}>Google</Text>
+            <Button title={"Sign Up"} onPress={handleSignUp} />
+            <View style={styles.policy}>
+              <Text style={{ color: "#fff" }}>By signing up I accept </Text>
+              <Text style={{ color: "#fff" }}>terms of use{" and "}</Text>
+              <Text style={{ color: "#fff" }}>privacy policy</Text>
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={[styles.option, { marginBottom: 35 }]}>
-              <icons.FontAwesome
-                name="facebook-square"
-                size={28}
-                color="#fff"
-                style={{ marginHorizontal: 10 }}
-              />
-              <Text style={{ color: "#fff", fontSize: 18 }}>Facebook</Text>
+
+            <Text style={styles.or}>or Sign Up with</Text>
+            <TouchableOpacity>
+              <View style={styles.option}>
+                <icons.MaterialCommunityIcons
+                  name="gmail"
+                  size={28}
+                  color="#fff"
+                  style={{ marginHorizontal: 10 }}
+                />
+                <Text style={{ color: "#fff", fontSize: 18 }}>Google</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={[styles.option, { marginBottom: 35 }]}>
+                <icons.FontAwesome
+                  name="facebook-square"
+                  size={28}
+                  color="#fff"
+                  style={{ marginHorizontal: 10 }}
+                />
+                <Text style={{ color: "#fff", fontSize: 18 }}>Facebook</Text>
+              </View>
+            </TouchableOpacity>
+            <View style={{ flexDirection: "row", justifyContent: "center" }}>
+              <Text style={[styles.text]}>Already having an account? </Text>
+              <TouchableOpacity onPress={toLogin}>
+                <Text style={{ color: "#fab430" }}>Sign In</Text>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
+          </KeyboardAvoidingView>
         </ScrollView>
       </View>
     </SafeAreaView>

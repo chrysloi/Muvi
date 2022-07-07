@@ -2,10 +2,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { View } from "react-native";
 import Login from "../screens/auth/login";
 import Register from "../screens/auth/register";
-import DetailScreen from "../screens/home/movieDetails";
+import MovieDetail from "../components/details/movie";
 import OnBoardScreen from "../screens/onboard";
 import TabNavigate from "./main.navigator";
-import SerieDetail from "../screens/home/series/serieDetails";
+import SerieDetail from "../components/details/serie";
 
 const stack = createStackNavigator();
 
@@ -28,9 +28,9 @@ const AppNavigator = () => {
         <stack.Screen name="Login" component={Login} />
         <stack.Screen name="Register" component={Register} />
         <stack.Screen
-          name="Details"
-          component={DetailScreen}
-          // options={{ headerShown: false }}
+          name="movieDetails"
+          component={MovieDetail}
+          options={{ headerShown: false }}
         />
         <stack.Screen
           name="SerieDetails"

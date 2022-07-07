@@ -7,62 +7,32 @@ import {
   Image,
   Alert,
 } from "react-native";
-import { useCallback, useEffect, useState } from "react";
 import * as icons from "@expo/vector-icons";
-import { vw, vh } from "../../components/units";
-import { useDispatch, useSelector } from "react-redux";
-import { GetVideoId } from "../../redux/actions/videos.action";
-import YoutubePlayer from "react-native-youtube-iframe";
-import Button from "../../components/button";
+import { vw, vh } from "../units";
+import { useNavigation } from "@react-navigation/native";
 
-export default function DetailScreen({ route, navigation }) {
-  const { original_title, backdrop_path, poster_path, overview, release_date } =
-    route.params;
-  const dispatch = useDispatch();
-  const { video_id } = useSelector((state) => state.Trailer);
-  const [playing, setPlaying] = useState(false);
-  const onStateChange = useCallback((state) => {
-    if (state === "ended") {
-      setPlaying(false);
-      Alert.alert("video has finished playing");
-    }
-  }, []);
-
-  const tooglePlaying = useCallback(() => {
-    setPlaying((prev) => !prev);
-  }, []);
-  useEffect(() => {
-    dispatch(GetVideoId(route.params.id));
-  }, []);
-  const youtubeKey = video_id?.filter(
-    (video) => video.name === "Official Trailer"
-  );
-  // .map((video) => video.key && video.name)
-  console.log(youtubeKey);
+export default function MovieDetail(props) {
+  const { params } = props.route;
+  const navigation = useNavigation();
+  const imageUri = "https://image.tmdb.org/t/p/w500";
 
   return (
     <ScrollView>
-      <View
-        style={{
-          backgroundColor: "#26272b",
-          alignItems: "center",
-          flex: 1,
-          paddingBottom: 10 * vh,
-        }}
-      >
+      <View style={styles.container}>
         <Image
-          source={{ uri: `https://image.tmdb.org/t/p/w500/${backdrop_path}` }}
+          source={{ uri: `${imageUri}${params.backdrop_path}` }}
           style={{ width: 100 * vw, height: 40 * vh }}
           blurRadius={2}
         />
-        {/* <TouchableOpacity
-          onPress={() => navigation.navigate("Home")}
+
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
           style={{ position: "absolute", top: 3 * vh, left: 5 * vw }}
         >
           <icons.Ionicons name="arrow-back-outline" size={26} color="#fed130" />
-        </TouchableOpacity> */}
+        </TouchableOpacity>
         <Image
-          source={{ uri: `https://image.tmdb.org/t/p/w500/${poster_path}` }}
+          source={{ uri: `${imageUri}${params.poster_path}` }}
           style={{
             position: "absolute",
             width: 50 * vw,
@@ -78,27 +48,33 @@ export default function DetailScreen({ route, navigation }) {
             fontWeight: "900",
           }}
         >
-          {original_title}
+          {params.original_title}
         </Text>
-        <Text style={{ color: "grey", paddingTop: 1 * vh }}>
-          {release_date}
+        <Text
+          style={{
+            color: "grey",
+            paddingTop: 1 * vh,
+            paddingBottom: 3 * vh,
+          }}
+        >
+          {params.release_date}
         </Text>
         {/* <Text style={{ color: "grey", paddingTop: 5 }}>
-          Adventure, Romantic, Thriller
-        </Text> */}
-        {youtubeKey?.map((video, i) => {
-          return (
-            <YoutubePlayer
-              key={video.id}
-              height={200}
-              width={"100%"}
-              play={playing}
-              videoId={video.key}
-              onChangeState={onStateChange}
-            />
-          );
-          // <Button title={playing ? "pause" : "play"} onPress={tooglePlaying} />;
-        })}
+              Adventure, Romantic, Thriller
+            </Text> */}
+        {/* {youtubeKey?.map((video, i) => {
+              return (
+                <YoutubePlayer
+                  key={video.id}
+                  height={33 * vh}
+                  width={100 * vw}
+                  play={playing}
+                  videoId={video.key}
+                  onChangeState={onStateChange}
+                />
+              );
+              // <Button title={playing ? "pause" : "play"} onPress={tooglePlaying} />;
+            })} */}
 
         <TouchableOpacity
           style={{
@@ -112,12 +88,10 @@ export default function DetailScreen({ route, navigation }) {
             justifyContent: "center",
             alignItems: "center",
           }}
-          onPress={tooglePlaying}
+          // onPress={tooglePlaying}
         >
           <icons.Feather name="play" size={16} color="black" />
-          <Text style={{ paddingHorizontal: 5 }}>
-            {playing ? "Pause" : "Play"}
-          </Text>
+          <Text style={{ paddingHorizontal: 5 }}>Play</Text>
         </TouchableOpacity>
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
@@ -159,16 +133,7 @@ export default function DetailScreen({ route, navigation }) {
             </Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.overview}>{overview}</Text>
-        {/* <Text
-          style={{ color: "grey", marginHorizontal: 35, marginVertical: 10 }}
-        >
-          Cast: Tom Holland, Mark Wahlberg, Antonio Banderas, Sophia Ali, Tati
-          Gabrielle, Steven Waddington, Pingi Moli, Tiernan Jones, Rudy Pankow,
-          Jesús Evita, Georgia Goodman, Diarmaid Murtagh, Joseph Balderrama,
-          Serena Posadino, Alana Boden, Jonathan Failla, Anthony Thomas, Peter
-          Seaton-Clark
-        </Text> */}
+        <Text style={styles.overview}>{params.overview}</Text>
       </View>
     </ScrollView>
   );
@@ -177,9 +142,11 @@ export default function DetailScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#26272b",
+    alignItems: "center",
+    flex: 1,
+    paddingBottom: 10 * vh,
   },
   overview: {
     color: "#fff",

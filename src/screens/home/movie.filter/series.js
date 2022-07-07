@@ -1,26 +1,27 @@
 import { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
-import { PopularSeries } from "../../../redux/actions/series.action";
-import MovieCardlarge from "../../../components/now.movie";
+import MovieCard from "../../../components/movieCards/serieCard";
+import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, SafeAreaView } from "react-native";
+import { PopularSeries } from "../../../redux/actions";
 
-const Series = ({ navigation }) => {
-  const [is_loading, setLoading] = useState(false);
+const Series = () => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { pop_series } = useSelector((state) => state.Series);
+  const { pop_series } = useSelector((state) => state.PopSeries);
 
   useEffect(() => {
     dispatch(PopularSeries());
   }, []);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
         {pop_series?.map((serie, i) => {
           return (
-            <MovieCardlarge
+            <MovieCard
               key={serie.id}
-              id={serie.id}
               title={serie.name}
               image={serie.backdrop_path}
               date={serie.first_air_date}
