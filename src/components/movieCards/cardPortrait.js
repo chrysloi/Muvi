@@ -27,7 +27,7 @@ export default (props) => {
         onPress={props.navigation}
       >
         <Image
-          source={`https://image.tmdb.org/t/p/w500${props.image}`}
+          source={{ uri: `https://image.tmdb.org/t/p/w500${props.image}` }}
           style={styles.imageStyles}
         />
         <View style={styles.text}>

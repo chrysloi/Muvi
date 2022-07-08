@@ -20,23 +20,13 @@ import { LatestMovies } from "../../../redux/actions/latestMovie";
 import { PopularMovies } from "../../../redux/actions/popularMovies";
 import { TopRatedMovies } from "../../../redux/actions/topRatedMovies";
 
-const Featured = () => {
+export const Featured = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  // const [is_loading, setLoading] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
+  // const [refreshing, setRefreshing] = useState(false);
   const { latest_movies } = useSelector((state) => state.Latest);
   const { pop_movies } = useSelector((state) => state.PopMovies);
   const { top_rated } = useSelector((state) => state.TopRated);
-
-  const wait = (timeout) => {
-    return new Promise((resolve) => setTimeout(resolve, timeout));
-  };
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
-  }, []);
 
   useEffect(() => {
     dispatch(LatestMovies());
@@ -50,18 +40,7 @@ const Featured = () => {
         barStyle={"light-content"}
         backgroundColor={"rgba(32, 33, 35, 1)"}
       />
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={styles.container}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            // progressBackgroundColor={"#fab430"}
-            // colors={["#fab430", "#fff"]}
-          />
-        }
-      >
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         {/* Latest Movies */}
         <View style={{ paddingTop: 10, minHeight: 40 * vh }}>
           <View style={styles.titleContainer}>
@@ -91,19 +70,21 @@ const Featured = () => {
           <View style={styles.titleContainer}>
             <Text style={styles.title}>Popular movies</Text>
           </View>
-          {pop_movies?.map((pop, i) => {
-            return (
-              <PotraitMovieCard
-                key={pop.id}
-                title={pop.original_title}
-                image={pop.backdrop_path}
-                date={pop.release_date}
-                navigation={() => {
-                  navigation.navigate("movieDetails", pop);
-                }}
-              />
-            );
-          })}
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {pop_movies?.map((pop, i) => {
+              return (
+                <PotraitMovieCard
+                  key={i}
+                  title={pop.original_title}
+                  image={pop.backdrop_path}
+                  date={pop.release_date}
+                  navigation={() => {
+                    navigation.navigate("movieDetails", pop);
+                  }}
+                />
+              );
+            })}
+          </ScrollView>
           {/* <FlatList
             data={pop_movies}
             renderItem={({ item }) => (
@@ -128,25 +109,26 @@ const Featured = () => {
           <View style={styles.titleContainer}>
             <Text style={styles.title}>Top rated</Text>
           </View>
-          {top_rated?.map((top, i) => {
-            return (
-              <PotraitMovieCard
-                key={top.id}
-                title={top.original_title}
-                image={top.backdrop_path}
-                date={top.release_date}
-                navigation={() => {
-                  navigation.navigate("movieDetails", top);
-                }}
-              />
-            );
-          })}
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {top_rated?.map((top, i) => {
+              return (
+                <PotraitMovieCard
+                  key={i}
+                  title={top.original_title}
+                  image={top.backdrop_path}
+                  date={top.release_date}
+                  navigation={() => {
+                    navigation.navigate("movieDetails", top);
+                  }}
+                />
+              );
+            })}
+          </ScrollView>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
-export default Featured;
 
 const styles = StyleSheet.create({
   container: {

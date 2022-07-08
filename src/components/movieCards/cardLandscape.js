@@ -24,17 +24,16 @@ export default (props) => {
         onPress={props.navigation}
       >
         <Image
-          source={require("../../../assets/Thor.jpg")}
+          source={{ uri: `https://image.tmdb.org/t/p/w500${props.image}` }}
           style={styles.imageStyles}
         />
         <View style={styles.text}>
           <Text numberOfLines={1} style={styles.titleStyles}>
-            Thor Love and Thunder
+            {props.title}
           </Text>
-          <Text style={styles.dateStyles}>8 Jul. 2022</Text>
+          <Text style={styles.dateStyles}>{props.date}</Text>
         </View>
       </TouchableOpacity>
-      {/* {props.detail ? console.log(props.detail) : ""} */}
     </View>
   );
 };

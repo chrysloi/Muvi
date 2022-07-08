@@ -1,18 +1,18 @@
 import { combineReducers } from "redux";
-import videoReducer from "./getVideo";
-import latestMovies from "./latestMovies";
-import nowPlaying from "./nowPlaying";
-import popularMovies from "./popularMovies";
-import popularseries from "./popularSeries";
-import singleMovie from "./singleMovie";
-import topRated from "./topRatedMovies";
+import videoReducers from "./getVideo";
+import latestMoviesReducers from "./latestMovies";
+import nowPlayingReducers from "./nowPlaying";
+import popularMoviesReducers from "./popularMovies";
+import popularseriesReducers from "./popularSeries";
+import singleMovieReducers from "./singleMovie";
+import topRatedReducers from "./topRatedMovies";
 
 export default combineReducers({
-  Video: videoReducer,
-  Latest: latestMovies,
-  Playing: nowPlaying,
-  PopMovies: popularMovies,
-  PopSeries: popularseries,
-  Movie: singleMovie,
-  TopRated: topRated,
+  Video: videoReducers,
+  Latest: latestMoviesReducers,
+  Playing: nowPlayingReducers,
+  PopMovies: popularMoviesReducers,
+  PopSeries: popularseriesReducers,
+  Movie: singleMovieReducers,
+  TopRated: topRatedReducers,
 });

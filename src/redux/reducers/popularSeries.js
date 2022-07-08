@@ -6,7 +6,7 @@ const initialState = {
   error: null,
 };
 
-export default function popularSeries(state = initialState, { type, payload }) {
+export default (state = initialState, { type, payload }) => {
   switch (type) {
     case GET_POPULAR_SERIES:
       return {
@@ -23,6 +23,6 @@ export default function popularSeries(state = initialState, { type, payload }) {
       };
 
     default:
-      return { state };
+      return state;
   }
-}
+};

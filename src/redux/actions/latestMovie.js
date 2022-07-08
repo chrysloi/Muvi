@@ -1,8 +1,6 @@
 import axios from "axios";
 import { GET_LATEST_MOVIES, GET_LATEST_MOVIES_FAILED } from "..";
 
-const key = "56f1cb38d475f4ac3ef8ad55e0c001f6";
-
 export const LatestMovies = () => async (dispatch) => {
   // try {
   //   const { data } = await axios.get(
@@ -23,7 +21,7 @@ export const LatestMovies = () => async (dispatch) => {
   // }
   await axios({
     method: "get",
-    url: `https://api.themoviedb.org/3/movie/latest?api_key=${key}`,
+    url: `https://api.themoviedb.org/3/movie/latest?api_key=56f1cb38d475f4ac3ef8ad55e0c001f6`,
   })
     .then((responseData) => {
       const { data } = responseData;

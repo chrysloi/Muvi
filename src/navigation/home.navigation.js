@@ -1,11 +1,11 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import Featured from "../screens/home/movie.filter/featured";
-import Series from "../screens/home/movie.filter/series";
-import Films from "../screens/home/movie.filter/films";
+import { Featured } from "../screens/home/featured";
+import Series from "../screens/home/series/index";
+import Films from "../screens/home/films/index";
 
 const Tab = createMaterialTopTabNavigator();
 
-function HomeNavigator() {
+export default function HomeNavigator() {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -18,11 +18,9 @@ function HomeNavigator() {
         tabBarScrollEnabled: true,
       }}
     >
-      {/* <Tab.Screen name="feartured" component={Featured} /> */}
+      <Tab.Screen name="feartured" component={Featured} />
       <Tab.Screen name="films" component={Films} />
       <Tab.Screen name="series" component={Series} />
     </Tab.Navigator>
   );
 }
-
-export default HomeNavigator;

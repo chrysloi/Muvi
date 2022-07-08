@@ -19,7 +19,6 @@ const Films = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      {/* Now playing */}
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         {now_playing?.map((now, index) => {
           return (

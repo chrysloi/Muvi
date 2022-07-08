@@ -1,7 +1,7 @@
 import axios from "axios";
 import { GET_NOW_PLAYING_MOVIES, GET_NOW_PLAYING_MOVIES_FAILED } from "../";
 
-const key = "56f1cb38d475f4ac3ef8ad55e0c001f6";
+const key = "";
 
 export const NowPlayingMovies = () => {
   return async (dispatch) => {
@@ -24,7 +24,7 @@ export const NowPlayingMovies = () => {
     // }
     await axios({
       method: "get",
-      url: `https://api.themoviedb.org/3/movie/now_playing?api_key=${key}`,
+      url: `https://api.themoviedb.org/3/movie/now_playing?api_key=56f1cb38d475f4ac3ef8ad55e0c001f6`,
     })
       .then((responseData) => {
         const { data } = responseData;

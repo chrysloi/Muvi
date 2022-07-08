@@ -17,7 +17,7 @@ const Series = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         {pop_series?.map((serie, i) => {
           return (
             <MovieCard
