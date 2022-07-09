@@ -1,24 +1,25 @@
-import { GET_SINGLE_MOVIE, GET_SINGLE_MOVIE_FAILED } from "..";
+import { GET_SERIE, GET_SERIE_FAILED } from "..";
 
 const initialState = {
   is_loading: false,
-  movieDetails: [],
+  serieDetails: {},
   error: null,
 };
 
 export default (state = initialState, { type, payload }) => {
   switch (type) {
-    case GET_SINGLE_MOVIE:
+    case GET_SERIE:
       return {
         ...state,
-        is_loading,
-        error: payload,
+        is_loading: false,
+        serieDetails: payload,
       };
 
-    case GET_SINGLE_MOVIE_FAILED:
+    case GET_SERIE_FAILED:
       return {
         ...state,
-        movieDetails: payload,
+        is_loading: false,
+        error: payload,
       };
 
     default:

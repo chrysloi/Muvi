@@ -16,7 +16,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { vw, vh } from "../../../components/units";
 import { useNavigation } from "@react-navigation/native";
 import PotraitMovieCard from "../../../components/movieCards/cardPortrait";
-import { LatestMovies } from "../../../redux/actions/latestMovie";
+import { Upcoming } from "../../../redux/actions/upcomingMovies";
 import { PopularMovies } from "../../../redux/actions/popularMovies";
 import { TopRatedMovies } from "../../../redux/actions/topRatedMovies";
 
@@ -24,12 +24,12 @@ export const Featured = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   // const [refreshing, setRefreshing] = useState(false);
-  const { latest_movies } = useSelector((state) => state.Latest);
+  const { upcoming_movies } = useSelector((state) => state.Upcoming);
   const { pop_movies } = useSelector((state) => state.PopMovies);
   const { top_rated } = useSelector((state) => state.TopRated);
 
   useEffect(() => {
-    dispatch(LatestMovies());
+    dispatch(Upcoming());
     dispatch(PopularMovies());
     dispatch(TopRatedMovies());
   }, []);
@@ -41,13 +41,13 @@ export const Featured = () => {
         backgroundColor={"rgba(32, 33, 35, 1)"}
       />
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-        {/* Latest Movies */}
+        {/* Upcoming Movies */}
         <View style={{ paddingTop: 10, minHeight: 40 * vh }}>
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>Latest Movies</Text>
+            <Text style={styles.title}>Upcoming Movies</Text>
           </View>
           <FlatList
-            data={latest_movies}
+            data={upcoming_movies}
             renderItem={({ item }) => (
               <MovieCard
                 key={item.id}
@@ -75,9 +75,9 @@ export const Featured = () => {
               return (
                 <PotraitMovieCard
                   key={i}
-                  title={pop.original_title}
-                  image={pop.backdrop_path}
-                  date={pop.release_date}
+                  title={""}
+                  image={pop.poster_path}
+                  date={""}
                   navigation={() => {
                     navigation.navigate("movieDetails", pop);
                   }}
@@ -114,9 +114,9 @@ export const Featured = () => {
               return (
                 <PotraitMovieCard
                   key={i}
-                  title={top.original_title}
-                  image={top.backdrop_path}
-                  date={top.release_date}
+                  title={""}
+                  image={top.poster_path}
+                  date={""}
                   navigation={() => {
                     navigation.navigate("movieDetails", top);
                   }}

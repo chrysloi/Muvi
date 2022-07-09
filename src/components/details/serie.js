@@ -11,13 +11,26 @@ import {
 import * as icons from "@expo/vector-icons";
 import { vw, vh } from "../units";
 import { useNavigation } from "@react-navigation/native";
-import MovieCard from "../movieCards/cardLandscape";
-import EpisodeCard from "../movieCards/cardPortrait";
+import MovieCard from "../movieCards/cardPortrait";
+import EpisodeCard from "../movieCards/serieCard";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { Serie } from "../../redux/actions/getSerie";
 
 export default function SerieDetail(props) {
   const { params } = props.route;
   const navigation = useNavigation();
   const imageUri = "https://image.tmdb.org/t/p/w500";
+  const { serieDetails } = useSelector((state) => state.Serie);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(Serie(params.id));
+  }, []);
+
+  const seasons = serieDetails.seasons;
+  const last_episode = serieDetails.last_episode_to_air;
+  // console.log(last_episode.still_path);
 
   return (
     <ScrollView
@@ -77,39 +90,42 @@ export default function SerieDetail(props) {
           <Text style={styles.text}>Download</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.lastEpisode}>
-        <EpisodeCard />
-        <View style={styles.details}>
-          <Text style={[styles.text, { fontSize: 8 * vw }]}>Title</Text>
-          <Text style={[styles.text, { fontSize: 4 * vw }]}>Air date</Text>
-          <Text style={[styles.text, { fontSize: 4 * vw }]}>
-            episode number
-          </Text>
-          <Text style={[styles.text, { fontSize: 4 * vw }]}>overview</Text>
-        </View>
-      </View>
+      <Text
+        style={[
+          styles.text,
+          {
+            fontSize: 6 * vw,
+            alignSelf: "flex-start",
+            marginStart: 3 * vh,
+            marginVertical: 2 * vh,
+          },
+        ]}
+      >
+        Latest episode
+      </Text>
+      <EpisodeCard
+        image={`${last_episode.still_path}`}
+        title={`${last_episode.name}`}
+        date={`${last_episode.air_date}`}
+      />
 
       <Text
         style={[
           styles.text,
-          { fontSize: 6 * vw, alignSelf: "flex-start", marginStart: 3 * vh },
+          {
+            fontSize: 6 * vw,
+            alignSelf: "flex-start",
+            marginStart: 3 * vh,
+            marginVertical: 2 * vh,
+          },
         ]}
       >
         Seasons
       </Text>
       <FlatList
-        style={{ marginVertical: 2 * vh }}
-        data={item}
+        data={seasons}
         renderItem={({ item }) => (
-          <MovieCard
-            key={item.id}
-            title={item.title}
-            image={item.image}
-            date={item.paragraph}
-            navigation={() => {
-              navigation.navigate("movieDetails", item);
-            }}
-          />
+          <MovieCard key={item.id} title={item.name} image={item.poster_path} />
         )}
         keyExtractor={(item) => item.id}
         horizontal
@@ -158,7 +174,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    paddingHorizontal: 5,
+    paddingHorizontal: 5 * vw,
     color: "#fff",
     fontWeight: "500",
   },
@@ -166,38 +182,7 @@ const styles = StyleSheet.create({
     marginVertical: 3 * vh,
     flexDirection: "row",
     justifyContent: "flex-start",
-    marginHorizontal: 5 * vw,
+    // marginHorizontal: 5 * vw,
     alignSelf: "flex-start",
   },
-  details: {
-    marginHorizontal: 3 * vw,
-  },
 });
-
-const item = [
-  {
-    key: 1,
-    title: "Enjoy your favourite movies everywhere",
-    paragraph:
-      "browse through our collections and discover hundeds of movies and series you love",
-    image: {
-      uri: "https://images.theconversation.com/files/291712/original/file-20190910-109952-1fzv6iu.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=1200.0&fit=crop",
-    },
-  },
-  {
-    key: 2,
-    title: "You get to choose!",
-    paragraph:
-      "Through all kind of genre you will be able to choose movies to watch when you want to.",
-    image: {
-      uri: "https://www.aiesec.in/wp-content/uploads/2018/08/Captain-america-1.jpg",
-    },
-  },
-  {
-    key: 3,
-    title: "From your favourite actors in the world",
-    paragraph:
-      "From the actors you love you will be able to watch the movies wherever you are comfortable",
-    image: require("../../../assets/Thor.jpg"),
-  },
-];

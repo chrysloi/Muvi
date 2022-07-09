@@ -1,22 +1,22 @@
-import { GET_LATEST_MOVIES, GET_LATEST_MOVIES_FAILED } from "..";
+import { GET_UPCOMING_MOVIES, GET_UPCOMING_MOVIES_FAILED } from "..";
 
 const initialState = {
   is_loading: false,
-  latest_movies: [],
+  upcoming_movies: [],
   error: null,
 };
 
 export default (state = initialState, { type, payload }) => {
   switch (type) {
-    case GET_LATEST_MOVIES:
+    case GET_UPCOMING_MOVIES:
       return {
         ...state,
         is_loading: false,
-        latest_movies: payload,
+        upcoming_movies: payload,
         error: null,
       };
 
-    case GET_LATEST_MOVIES_FAILED:
+    case GET_UPCOMING_MOVIES_FAILED:
       return {
         ...state,
         is_loading,

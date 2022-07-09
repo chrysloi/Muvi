@@ -1,8 +1,10 @@
 export * from "./getVideo";
-export * from "./latestMovie";
+export * from "./upcomingMovies";
 // export * from "./authAction";
 export * from "./nowPlaying";
 export * from "./popularMovies";
 export * from "./popularSeries";
 export * from "./singleMovie";
 export * from "./topRatedMovies";
+export * from "./getSerie";
+export * from "./searchAction";

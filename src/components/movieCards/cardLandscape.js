@@ -13,6 +13,7 @@ import { vh, vw } from "../units";
 import { useNavigation } from "@react-navigation/native";
 
 export default (props) => {
+  const navigation = useNavigation();
   // const { image, title, date } = props;
   // const navigation = useNavigation();
   // const image = require("../../../assets/Thor.jpg");
