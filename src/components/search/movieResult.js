@@ -1,10 +1,13 @@
-import { StyleSheet, Text, View, Image, SafeAreaView } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { vh, vw } from "../units";
 
 const MovieResult = (props) => {
   return (
-    <SafeAreaView style={{ flex: 1, paddingHorizontal: 5 * vw }}>
+    <TouchableOpacity
+      style={{ flex: 1, paddingHorizontal: 5 * vw }}
+      onPress={props.navigation}
+    >
       <View style={styles.container}>
         <Image
           source={{ uri: `https://image.tmdb.org/t/p/w500${props.image}` }}
@@ -16,7 +19,7 @@ const MovieResult = (props) => {
           <Text style={[styles.text, styles.date]}>{props.type}</Text>
         </View>
       </View>
-    </SafeAreaView>
+    </TouchableOpacity>
   );
 };
 

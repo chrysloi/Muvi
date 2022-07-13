@@ -28,7 +28,7 @@ const Films = () => {
               image={now.backdrop_path}
               date={now.release_date}
               navigation={() => {
-                navigation.navigate("movieDetails", now);
+                navigation.navigate("movieDetails", now.id);
               }}
             />
           );

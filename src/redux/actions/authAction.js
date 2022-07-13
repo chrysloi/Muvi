@@ -1,46 +1,91 @@
-import auth from "firebase/auth";
-import actions from "./actions";
-import firebase from "../../utils/auth.firebase";
+import { auth } from "../../utils/auth.firebase";
+import {
+  USER_LOGIN,
+  USER_LOGIN_FAILED,
+  USER_LOGIN_SUCCESS,
+  USER_LOGOUT_SUCCESS,
+} from "..";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const loginUser = (email, password) => async (dispatch) => {
-  firebase
-    .auth()
-    .signInWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      // Signed in
-      var user = userCredential.user;
-      dispatch(actions(LOGIN_SUCCESS, user));
-      // ...
-    })
-    .catch((error) => {
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      dispatch(actions(LOGIN_FAILURE, errorCode + errorMessage));
+export const Initial = () => async (dispatch) => {
+  // dispatch({ type: USER_LOGIN });
+  const token = await AsyncStorage.getItem("userToken");
+  if (token !== null) {
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+      payload: token,
     });
+  }
+  // AsyncStorage.getItem("userToken")
+  //   .then((token) => {
+  //     if (token) {
+  //       dispatch({
+  //         type: USER_LOGIN_SUCCESS,
+  //         payload: token,
+  //       });
+  //     } else {
+  //       dispatch({
+  //         type: USER_LOGIN_FAILED,
+  //       });
+  //     }
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //     dispatch({
+  //       type: USER_LOGIN_FAILED,
+  //     });
+  //   });
 };
 
-export const RegisterUser = (email, password) => async (dispatch) => {
-  firebase
-    .auth()
-    .signInWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      var user = userCredential.user;
-      dispatch(actions(REGISTER_SUCCESS, user));
-    })
-    .catch((error) => {
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      dispatch(actions(REGISTER_FAILURE, errorMessage));
+export const AuthLogin = (email, password) => async (dispatch) => {
+  const token = email + password;
+  console.log(token);
+  await AsyncStorage.setItem("userToken", token);
+  if (token) {
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+      payload: token,
     });
+  }
 };
 
-export const UserStateChange = () => async (dispatch) => {
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      var uid = user.uid;
-      dispatch(actions(USER_HAS_LOGINED_IN_SUCCESS, user));
-    } else {
-      dispatch(actions(USER_HAS_LOGINED_OUT_SUCCESS));
-    }
+export const AuthLogout = () => async (dispatch) => {
+  await AsyncStorage.removeItem("userToken");
+  dispatch({
+    type: USER_LOGOUT_SUCCESS,
   });
 };
+
+// export const RegisterUser = (email, password) => async (dispatch) => {
+//   auth
+//     .signInWithEmailAndPassword(email, password)
+//     .then((userCredential) => {
+//       var user = userCredential.user;
+//       dispatch({
+//         type: "REGISTER_SUCCESS",
+//         // payload: user,
+//       });
+//     })
+//     .catch((error) => {
+//       var errorCode = error.code;
+//       var errorMessage = error.message;
+//       dispatch({
+//         type: "REGISTER_FAILURE",
+//         payload: errorMessage,
+//       });
+//     });
+// };
+
+// export const UserStateChange = () => async (dispatch) => {
+//   auth.onAuthStateChanged((user) => {
+//     if (user) {
+//       const { uid } = user;
+//       dispatch({
+//         type: USER_LOGIN_SUCCESS,
+//         // payload: uid,
+//       });
+//     } else {
+//       dispatch({ type: USER_LOGOUT_SUCCESS });
+//     }
+//   });
+// };

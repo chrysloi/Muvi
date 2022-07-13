@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_SERIE, GET_SERIE_FAILED } from "../";
+import { GET_SERIE, GET_SERIE_FAILED, RESET_SERIE_DETAILS } from "../";
 
 export const Serie = (tv_id) => {
   return async (dispatch) => {
@@ -22,4 +22,10 @@ export const Serie = (tv_id) => {
         });
       });
   };
+};
+
+export const ResetSerie = () => (dispatch) => {
+  dispatch({
+    type: RESET_SERIE_DETAILS,
+  });
 };

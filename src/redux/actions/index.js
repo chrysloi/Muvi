@@ -1,6 +1,6 @@
 export * from "./getVideo";
 export * from "./upcomingMovies";
-// export * from "./authAction";
+export * from "./authAction";
 export * from "./nowPlaying";
 export * from "./popularMovies";
 export * from "./popularSeries";

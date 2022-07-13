@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SEARCHING, SEARCH_FAILED } from "..";
+import { SEARCHING, SEARCH_DONE, SEARCH_FAILED } from "..";
 
 export const Searching = (key_word) => (dispatch) => {
   axios({
@@ -9,7 +9,7 @@ export const Searching = (key_word) => (dispatch) => {
     .then((responseData) => {
       const { data } = responseData;
       dispatch({
-        type: SEARCHING,
+        type: SEARCH_DONE,
         payload: data.results,
       });
     })

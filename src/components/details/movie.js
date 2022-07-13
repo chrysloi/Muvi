@@ -10,36 +10,61 @@ import {
 import * as icons from "@expo/vector-icons";
 import { vw, vh } from "../units";
 import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { GetVideo } from "../../redux/actions";
+import YoutubePlayer from "react-native-youtube-iframe";
+import { GetSingleMovie, ResetSingleMovie } from "../../redux/actions/";
 
 export default function MovieDetail(props) {
   const { params } = props.route;
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const imageUri = "https://image.tmdb.org/t/p/w500";
+  const { video } = useSelector((state) => state.Video);
+  const { movieDetails } = useSelector((state) => state.Movie);
+
+  const youtubeKey = video?.filter(
+    (vid) => vid.name === "Official Trailer"
+  )?.[0]?.key;
+  // const trailer = youtubeKey?.[0]?.key;
+
+  useEffect(() => {
+    dispatch(GetVideo(params));
+    dispatch(GetSingleMovie(params));
+  }, []);
+
+  const handleBack = () => {
+    dispatch(ResetSingleMovie());
+    navigation.goBack();
+  };
 
   return (
-    <ScrollView>
+    <ScrollView style={{ flex: 1, backgroundColor: "#26272b" }}>
       <View style={styles.container}>
         <Image
-          source={{ uri: `${imageUri}${params.backdrop_path}` }}
-          style={{ width: 100 * vw, height: 40 * vh }}
+          source={{ uri: `${imageUri}${movieDetails.backdrop_path}` }}
+          style={{ width: 100 * vw, height: 35 * vh }}
           blurRadius={2}
         />
 
         <TouchableOpacity
-          onPress={() => navigation.goBack()}
+          onPress={handleBack}
           style={{ position: "absolute", top: 3 * vh, left: 5 * vw }}
         >
           <icons.Ionicons name="arrow-back-outline" size={26} color="#fed130" />
         </TouchableOpacity>
+
         <Image
-          source={{ uri: `${imageUri}${params.poster_path}` }}
+          source={{ uri: `${imageUri}${movieDetails.poster_path}` }}
           style={{
             position: "absolute",
             width: 50 * vw,
             height: 40 * vh,
-            top: 13 * vh,
+            top: 8 * vh,
           }}
         />
+
         <Text
           style={{
             color: "#fff",
@@ -48,7 +73,7 @@ export default function MovieDetail(props) {
             fontWeight: "900",
           }}
         >
-          {params.original_title}
+          {movieDetails.original_title}
         </Text>
         <Text
           style={{
@@ -57,42 +82,14 @@ export default function MovieDetail(props) {
             paddingBottom: 3 * vh,
           }}
         >
-          {params.release_date}
+          {movieDetails.release_date}
         </Text>
-        {/* <Text style={{ color: "grey", paddingTop: 5 }}>
-              Adventure, Romantic, Thriller
-            </Text> */}
-        {/* {youtubeKey?.map((video, i) => {
-              return (
-                <YoutubePlayer
-                  key={video.id}
-                  height={33 * vh}
-                  width={100 * vw}
-                  play={playing}
-                  videoId={video.key}
-                  onChangeState={onStateChange}
-                />
-              );
-              // <Button title={playing ? "pause" : "play"} onPress={tooglePlaying} />;
-            })} */}
-
-        <TouchableOpacity
-          style={{
-            flexDirection: "row",
-            height: 40,
-            minWidth: 340,
-            backgroundColor: "#fed130",
-            marginHorizontal: 20,
-            marginVertical: 15,
-            borderRadius: 5,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          // onPress={tooglePlaying}
-        >
-          <icons.Feather name="play" size={16} color="black" />
-          <Text style={{ paddingHorizontal: 5 }}>Play</Text>
-        </TouchableOpacity>
+        <YoutubePlayer
+          height={35 * vh}
+          width={100 * vw}
+          play={false}
+          videoId={trailer}
+        />
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
             style={{
@@ -133,7 +130,7 @@ export default function MovieDetail(props) {
             </Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.overview}>{params.overview}</Text>
+        <Text style={styles.overview}>{movieDetails.overview}</Text>
       </View>
     </ScrollView>
   );
@@ -141,12 +138,9 @@ export default function MovieDetail(props) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: "center",
-    backgroundColor: "#26272b",
     alignItems: "center",
-    flex: 1,
-    paddingBottom: 10 * vh,
+    paddingBottom: 5 * vh,
   },
   overview: {
     color: "#fff",

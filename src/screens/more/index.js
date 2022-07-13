@@ -9,17 +9,23 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+import { useDispatch } from "react-redux";
 import { vh, vw } from "../../components/units";
-import Button from "../../components/button";
+import { AuthLogout } from "../../redux/actions";
 import { auth } from "../../utils/auth.firebase";
 
 const More = () => {
-  const navigation = useNavigation();
+  const dispatch = useDispatch();
   const signOut = () => {
-    auth.signOut().then(() => {
-      navigation.replace("Login");
-      ToastAndroid.show("logged out", ToastAndroid.SHORT);
-    });
+    auth
+      .signOut()
+      .then(() => {
+        dispatch(AuthLogout());
+        ToastAndroid.show("logged out", ToastAndroid.SHORT);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   return (
     <SafeAreaView style={[{ flex: 1 }, styles.container]}>

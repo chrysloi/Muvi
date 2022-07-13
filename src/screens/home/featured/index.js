@@ -55,7 +55,7 @@ export const Featured = () => {
                 image={item.backdrop_path}
                 date={item.release_date}
                 navigation={() => {
-                  navigation.navigate("movieDetails", item);
+                  navigation.navigate("movieDetails", item.id);
                 }}
               />
             )}
@@ -79,29 +79,12 @@ export const Featured = () => {
                   image={pop.poster_path}
                   date={""}
                   navigation={() => {
-                    navigation.navigate("movieDetails", pop);
+                    navigation.navigate("movieDetails", pop.id);
                   }}
                 />
               );
             })}
           </ScrollView>
-          {/* <FlatList
-            data={pop_movies}
-            renderItem={({ item }) => (
-              <PotraitMovieCard
-                key={item.id}
-                title={item.title}
-                image={item.image}
-                date={item.paragraph}
-                navigation={() => {
-                  navigation.navigate("movieDetails", item);
-                }}
-              />
-            )}
-            keyExtractor={(item) => item.id}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-          /> */}
         </View>
 
         {/* Top rated */}
@@ -118,7 +101,7 @@ export const Featured = () => {
                   image={top.poster_path}
                   date={""}
                   navigation={() => {
-                    navigation.navigate("movieDetails", top);
+                    navigation.navigate("movieDetails", top.id);
                   }}
                 />
               );

@@ -8,6 +8,7 @@ import singleMovieReducers from "./singleMovie";
 import topRatedReducers from "./topRatedMovies";
 import serieReducers from "./getSerie";
 import searchReducer from "./searchReducer";
+import authReduce from "./authReduce";
 
 export default combineReducers({
   Video: videoReducers,
@@ -19,4 +20,5 @@ export default combineReducers({
   PopSeries: popularseriesReducers,
   Serie: serieReducers,
   Search: searchReducer,
+  Login: authReduce,
 });

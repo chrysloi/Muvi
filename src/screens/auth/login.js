@@ -1,5 +1,7 @@
 import {
+  Alert,
   Image,
+  Keyboard,
   KeyboardAvoidingView,
   SafeAreaView,
   StatusBar,
@@ -12,34 +14,50 @@ import {
 } from "react-native";
 import Button from "../../components/button";
 import * as icons from "@expo/vector-icons";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { LoginUser, UserStateChange } from "../../redux/actions/authAction";
+import { connect, useDispatch } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { TokenContext } from "../../components/tokenContext";
 import { auth } from "../../utils/auth.firebase";
+import { AuthLogin } from "../../redux/actions/authAction";
 
-const Login = () => {
+const Login = (props) => {
   const navigation = useNavigation();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+
   const toRegister = () => {
     navigation.replace("Register");
   };
 
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        navigation.replace("Main");
-      }
-    });
-  }, []);
   const handleSignIn = () => {
+    Keyboard.dismiss();
     auth
       .signInWithEmailAndPassword(email, password)
-      .then(() => {
-        ToastAndroid.show("Logged in", ToastAndroid.LONG);
+      .then((userCredentials) => {
+        const user = userCredentials.user;
+        dispatch(AuthLogin(email, password));
+        alert("Login Successful");
       })
-      .then(() => navigation.replace("Main"))
-      .catch((error) => alert(error.message));
+      .catch((error) => {
+        alert(error.message);
+      });
   };
+
+  // const persistUser = (token, message, status) => {
+  //   AsyncStorage.setItem("userToken", JSON.stringify(token))
+  //     .then(() => {
+  //       alert(message, status);
+  //       setUserToken(token);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       alert(error);
+  //     });
+  // };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -68,6 +86,7 @@ const Login = () => {
                 keyboardType={"email-address"}
                 value={email}
                 onChangeText={(text) => setEmail(text)}
+                returnKeyType={"next"}
               />
             </View>
           </View>
@@ -171,4 +190,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+const mapToSate = ({ login }) => ({
+  login: login,
+});
+export default connect(mapToSate, {
+  loginUser: LoginUser,
+  UserState: UserStateChange,
+})(Login);

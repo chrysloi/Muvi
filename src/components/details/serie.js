@@ -14,23 +14,35 @@ import { useNavigation } from "@react-navigation/native";
 import MovieCard from "../movieCards/cardPortrait";
 import EpisodeCard from "../movieCards/serieCard";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { Serie } from "../../redux/actions/getSerie";
+import { useCallback, useEffect } from "react";
+import { Serie, ResetSerie } from "../../redux/actions/getSerie";
+import { useState } from "react";
+import { GetVideo } from "../../redux/actions";
+import Trailer from "../trailer";
 
 export default function SerieDetail(props) {
   const { params } = props.route;
   const navigation = useNavigation();
   const imageUri = "https://image.tmdb.org/t/p/w500";
+
   const { serieDetails } = useSelector((state) => state.Serie);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(Serie(params.id));
+    dispatch(Serie(params));
   }, []);
 
+  const handleBack = () => {
+    dispatch(ResetSerie());
+    navigation.goBack();
+  };
+
   const seasons = serieDetails.seasons;
-  const last_episode = serieDetails.last_episode_to_air;
-  // console.log(last_episode.still_path);
+  // const last_episode = serieDetails.last_episode_to_air;
+  // const episodePoster = last_episode.still_path;
+  // const episodeTitle = last_episode.name;
+  // const episodeAirDate = last_episode.air_date;
+  // console.log(last_episode);
 
   return (
     <ScrollView
@@ -38,11 +50,12 @@ export default function SerieDetail(props) {
       contentContainerStyle={{ alignItems: "center", paddingBottom: 3 * vh }}
     >
       <Image
-        source={{ uri: `${imageUri}${params.backdrop_path}` }}
+        source={{ uri: `${imageUri}${serieDetails.backdrop_path}` }}
         style={{ width: 100 * vw, height: 40 * vh }}
       />
+
       <TouchableOpacity
-        onPress={() => navigation.goBack()}
+        onPress={handleBack}
         style={{ position: "absolute", top: 3 * vh, left: 5 * vw }}
       >
         <icons.Ionicons name="arrow-back-outline" size={26} color="#fed130" />
@@ -56,27 +69,15 @@ export default function SerieDetail(props) {
           fontWeight: "900",
         }}
       >
-        {params.original_name}
+        {serieDetails.original_name}
       </Text>
       <Text style={[styles.text, { fontSize: 4 * vw, opacity: 0.7 }]}>
-        {params.overview}
+        {serieDetails.overview}
       </Text>
-      {/* {youtubeKey?.map((video, i) => {
-          return (
-            <YoutubePlayer
-              key={video.id}
-              height={33 * vh}
-              width={100 * vw}
-              play={playing}
-              videoId={video.key}
-              onChangeState={onStateChange}
-            />
-          );
-        })} */}
-      {/* <Text style={{ color: "grey", paddingTop: 5 }}>
-          Adventure, Romantic, Thriller
-        </Text> */}
-      <TouchableOpacity style={styles.buttonPlay}>
+      <TouchableOpacity
+        style={styles.buttonPlay}
+        onPress={() => setPlaying(!playing)}
+      >
         <icons.Feather name="play" size={16} color="black" />
         <Text style={{ paddingHorizontal: 5 }}>Play</Text>
       </TouchableOpacity>
@@ -90,7 +91,7 @@ export default function SerieDetail(props) {
           <Text style={styles.text}>Download</Text>
         </TouchableOpacity>
       </View>
-      <Text
+      {/* <Text
         style={[
           styles.text,
           {
@@ -104,10 +105,23 @@ export default function SerieDetail(props) {
         Latest episode
       </Text>
       <EpisodeCard
-        image={`${last_episode.still_path}`}
-        title={`${last_episode.name}`}
-        date={`${last_episode.air_date}`}
-      />
+      // image={episodePoster}
+      // title={episodeTitle}
+      // date={episodeAirDate}
+      >
+        {youtubeKey?.map((video, i) => {
+          return (
+            <YoutubePlayer
+              key={i}
+              height={33 * vh}
+              width={100 * vw}
+              play={playing}
+              videoId={video.key}
+              onChangeState={onStateChange}
+            />
+          );
+        })}
+      </EpisodeCard> */}
 
       <Text
         style={[

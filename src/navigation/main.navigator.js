@@ -24,6 +24,7 @@ const TabNavigate = () => {
         headerShadowVisible: false,
         tabBarStyle: { backgroundColor: "#202123" },
         tabBarActiveTintColor: "#fab430",
+        tabBarHideOnKeyboard: true,
       }}
     >
       <tab.Screen

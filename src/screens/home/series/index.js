@@ -27,7 +27,7 @@ const Series = () => {
               date={serie.first_air_date}
               overview={serie.overview}
               navigation={() => {
-                navigation.navigate("SerieDetails", serie);
+                navigation.navigate("SerieDetails", serie.id);
               }}
             />
           );
