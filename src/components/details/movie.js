@@ -12,7 +12,7 @@ import { vw, vh } from "../units";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GetVideo } from "../../redux/actions";
+import { GetVideo, ResetVideo } from "../../redux/actions";
 import YoutubePlayer from "react-native-youtube-iframe";
 import { GetSingleMovie, ResetSingleMovie } from "../../redux/actions/";
 
@@ -27,15 +27,15 @@ export default function MovieDetail(props) {
   const youtubeKey = video?.filter(
     (vid) => vid.name === "Official Trailer"
   )?.[0]?.key;
-  // const trailer = youtubeKey?.[0]?.key;
 
   useEffect(() => {
-    dispatch(GetVideo(params));
     dispatch(GetSingleMovie(params));
+    dispatch(GetVideo(params));
   }, []);
 
   const handleBack = () => {
     dispatch(ResetSingleMovie());
+    dispatch(ResetVideo());
     navigation.goBack();
   };
 
@@ -88,8 +88,9 @@ export default function MovieDetail(props) {
           height={35 * vh}
           width={100 * vw}
           play={false}
-          videoId={trailer}
+          videoId={youtubeKey}
         />
+
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
             style={{

@@ -1,4 +1,4 @@
-import { GET_VIDEO, GET_VIDEO_FAILED } from "..";
+import { GET_VIDEO, GET_VIDEO_FAILED, RESET_VIDEO } from "..";
 
 const initialState = {
   is_loading: false,
@@ -18,6 +18,12 @@ export default (state = initialState, { type, payload }) => {
       return {
         ...state,
         error: payload,
+      };
+
+    case RESET_VIDEO:
+      return {
+        ...state,
+        video: [],
       };
 
     default:

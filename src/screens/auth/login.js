@@ -16,21 +16,29 @@ import Button from "../../components/button";
 import * as icons from "@expo/vector-icons";
 import { useState, useEffect, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { LoginUser, UserStateChange } from "../../redux/actions/authAction";
-import { connect, useDispatch } from "react-redux";
+import {
+  Initial,
+  LoginUser,
+  UserStateChange,
+} from "../../redux/actions/authAction";
+import { connect, useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TokenContext } from "../../components/tokenContext";
 import { auth } from "../../utils/auth.firebase";
 import { AuthLogin } from "../../redux/actions/authAction";
+import { WaveIndicator } from "react-native-indicators";
 
 const Login = (props) => {
   const navigation = useNavigation();
+  const [is_loading, setLoading] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
 
-  const toRegister = () => {
-    navigation.replace("Register");
+  const token = useSelector((state) => state.Login.authToken);
+  const persistUser = async () => {
+    dispatch(Initial());
+    setLoading(false);
   };
 
   const handleSignIn = () => {
@@ -38,8 +46,9 @@ const Login = (props) => {
     auth
       .signInWithEmailAndPassword(email, password)
       .then((userCredentials) => {
-        const user = userCredentials.user;
-        dispatch(AuthLogin(email, password));
+        const { uid } = userCredentials.user;
+        // console.log(uid);
+        dispatch(AuthLogin(uid));
         alert("Login Successful");
       })
       .catch((error) => {
@@ -58,6 +67,14 @@ const Login = (props) => {
   //       alert(error);
   //     });
   // };
+
+  useEffect(() => {
+    persistUser();
+  }, []);
+
+  if (is_loading) {
+    return <WaveIndicator color="#fab430" />;
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -140,7 +157,7 @@ const Login = (props) => {
           </TouchableOpacity>
           <View style={{ flexDirection: "row", justifyContent: "center" }}>
             <Text style={[styles.text]}>Don't have an account? </Text>
-            <TouchableOpacity onPress={toRegister}>
+            <TouchableOpacity onPress={() => navigation.replace("Register")}>
               <Text style={{ color: "#fab430" }}>Sign Up</Text>
             </TouchableOpacity>
           </View>

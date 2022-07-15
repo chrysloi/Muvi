@@ -28,9 +28,7 @@ const Register = () => {
   const [gender, setGender] = useState("");
   // const dispatch = useDispatch();
 
-  const toLogin = () => {
-    navigation.replace("Login");
-  };
+  const toLogin = () => {};
   const handleSignUp = () => {
     auth
       .createUserWithEmailAndPassword(email, password)
@@ -85,10 +83,10 @@ const Register = () => {
                 <TextInput
                   placeholder="e.g mail@example.com"
                   placeholderTextColor={"#c9c9c9"}
-                  style={{ fontSize: 17, color: "#fff" }}
+                  style={{ fontSize: 17, color: "#fff", width: "100%" }}
                   keyboardType={"email-address"}
+                  onChangeText={(text) => setEmail(text)}
                   value={email}
-                  onChangeText={setEmail}
                 />
               </View>
             </View>
@@ -172,10 +170,10 @@ const Register = () => {
                 <TextInput
                   placeholder="your Password"
                   placeholderTextColor={"#c9c9c9"}
-                  style={{ fontSize: 17, color: "#fff" }}
+                  style={{ fontSize: 17, color: "#fff", width: "100%" }}
                   value={password}
                   secureTextEntry
-                  onChangeText={setPassword}
+                  onChangeText={(text) => setPassword(text)}
                 />
               </View>
             </View>
@@ -234,7 +232,7 @@ const Register = () => {
             </TouchableOpacity>
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
               <Text style={[styles.text]}>Already having an account? </Text>
-              <TouchableOpacity onPress={toLogin}>
+              <TouchableOpacity onPress={() => navigation.replace("Login")}>
                 <Text style={{ color: "#fab430" }}>Sign In</Text>
               </TouchableOpacity>
             </View>

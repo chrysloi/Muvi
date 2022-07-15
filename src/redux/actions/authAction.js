@@ -10,6 +10,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export const Initial = () => async (dispatch) => {
   // dispatch({ type: USER_LOGIN });
   const token = await AsyncStorage.getItem("userToken");
+  console.log(token);
   if (token !== null) {
     dispatch({
       type: USER_LOGIN_SUCCESS,
@@ -37,16 +38,14 @@ export const Initial = () => async (dispatch) => {
   //   });
 };
 
-export const AuthLogin = (email, password) => async (dispatch) => {
-  const token = email + password;
-  console.log(token);
+export const AuthLogin = (uid) => async (dispatch) => {
+  const token = uid;
+  // console.log(token);
   await AsyncStorage.setItem("userToken", token);
-  if (token) {
-    dispatch({
-      type: USER_LOGIN_SUCCESS,
-      payload: token,
-    });
-  }
+  dispatch({
+    type: USER_LOGIN_SUCCESS,
+    // payload: token,
+  });
 };
 
 export const AuthLogout = () => async (dispatch) => {

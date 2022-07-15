@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_VIDEO, GET_VIDEO_FAILED } from "..";
+import { GET_VIDEO, GET_VIDEO_FAILED, RESET_VIDEO } from "..";
 
 const key = "56f1cb38d475f4ac3ef8ad55e0c001f6";
 
@@ -23,4 +23,11 @@ export const GetVideo = (movie_id) => (dispatch) => {
         payload: err.message,
       });
     });
+};
+
+export const ResetVideo = () => (dispatch) => {
+  dispatch({
+    type: RESET_VIDEO,
+    payload: [],
+  });
 };
